@@ -1,0 +1,174 @@
+Fattura n. 2022/1000885
+Data Emissione 28/01/2022
+Pag.1 di 4
+Servizio Energia Elettrica
+DATI PDE
+Codice PDE 39047583
+Matricola 0509620713027
+STRADA DI SAN MICHELE 150/1 
+- 47893 BORGO MAGGIORE SM 
+Indirizzo di 
+Fornitura
+Tipologia d'Uso Energia domestico - Energia, Tipo 
+utilizzo basso
+Tipologia Offerta SCAMBIO SUL POSTO IN REGIME 
+SPECIALE
+4,50 KWPotenza impegnata
+4,95 KWPotenza disponibile
+DATI CLIENTE
+Data Attivazione
+Codice Contratto
+Indirizzo di
+Residenza/Sede 
+Legale
+ISS
+COE
+Cliente
+Codice Cliente
+2009/4689
+ 111157
+13920
+GENNARI CLAUDIO MARINO
+L'importo della fattura verrà addebitato sul c/c da 
+Lei indicato alla data di scadenza, SBF.
+174,89 € 
+Data Scadenza
+Totale da Pagare
+14/02/2022
+A.A.S.S.
+Via A. di Superchio, 16
+47893 Borgo Maggiore
+Tel. 0549 883700
+CONTATTI UTILI
+SITO WEB
+E-MAIL
+lunedì, giovedì: 8.30 - 17.00
+martedì, mercoledì, venerdì: 8.30 - 
+13.30 su prenotazione
+commerciale@aass.sm
+www.aass.sm
+COMUNICAZIONI 
+E RECLAMI
+APERTURA 
+SPORTELLI AL 
+PUBBLICO
+Gentile Cliente
+GENNARI CLAUDIO MARINO
+STRADA DI SAN MICHELE 150
+47893 BORGO MAGGIORE SM
+Periodo di fatturazione dal 01/05/2021 al 31/08/2021
+SEGNALAZIONE GUASTI 
+FUORI ORARIO SERVIZIO
+0549/887777
+STRADA DI SAN MICHELE 150 - 
+47893 BORGO MAGGIORE SM
+DETTAGLIO LETTURE
+Tipo Lettura
+Data Lettura 
+precedente
+Lettura
+precedente
+Data 
+Lettura 
+Lettura
+Attuale
+Provenienza Consumo Coeff K
+30/04/2021 31/05/2021Energia Attiva  25.173 24.879 LETTURA REALE  294,00  1,00
+31/05/2021 30/06/2021Energia Attiva  25.477 25.173 LETTURA REALE  304,00  1,00
+30/06/2021 31/07/2021Energia Attiva  25.831 25.477 LETTURA REALE  354,00  1,00
+31/07/2021 31/08/2021Energia Attiva  26.192 25.831 LETTURA REALE  361,00  1,00
+Credito precedente anno 2020: 633 kWh
+Credito attuale anno 2020: 0 kWh
+Credito precedente anno 2021: 0 kWh
+Azienda Autonoma di Stato per i Servizi Pubblici - Repubblica di San Marino
+Via Andrea di Superchio, 16 - 47893 Borgo Maggiore 
+Telefono +378 (0549) 883700/ Fax +378 (0549) 883720 - email: info@aass.sm - www.aass.sm
+Cod. Op. Econ. SM 02463
+Servizio Energia Elettrica Fattura n. 2022/1000885  Data Emissione 28/01/2022Pag.2 di 4
+Unità di 
+Misura
+Prezzo 
+Unitario
+Quantità Totale
+SERVIZI ENERGIA ELETTRICA
+Corrispettivo potenza impegnata 01/05/2021 31/05/2021  0,896910  4,50  4,04€/KW
+Tariffa raccolta rifiuti 01/05/2021 31/05/2021  0,059130  294  17,38€/kWh
+Corrispettivo potenza impegnata 01/06/2021 30/06/2021  0,867978  4,50  3,91€/KW
+Tariffa raccolta rifiuti 01/06/2021 30/06/2021  0,059130  304  17,98€/kWh
+Corrispettivo energia 01/07/2021 31/07/2021  0,089450  163  14,58€/kWh1° scaglione
+Corrispettivo energia 01/07/2021 31/07/2021  0,189510  156  29,56€/kWh2° scaglione
+Corrispettivo potenza impegnata 01/07/2021 31/07/2021  0,896910  4,50  4,04€/KW
+Tariffa raccolta rifiuti 01/07/2021 31/07/2021  0,059130  354  20,93€/kWh
+Corrispettivo energia 01/08/2021 31/08/2021  0,089450  163  14,58€/kWh1° scaglione
+Corrispettivo energia 01/08/2021 31/08/2021  0,189510  198  37,52€/kWh2° scaglione
+Corrispettivo potenza impegnata 01/08/2021 31/08/2021  0,896910  4,50  4,04€/KW
+Tariffa raccolta rifiuti 01/08/2021 31/08/2021  0,059130  45  2,66€/kWh
+TOTALE SERVIZI ENERGIA ELETTRICA  171,22
+ONERI DIVERSI DA QUELLI DOVUTI PER I SERVIZI ENERGIA ELETTRICA
+Addizionale incentivi FER  3,4101/05/2021 31/08/2021
+IMPOSTA DI QUIETANZA
+Imposta di quietanza  0,26
+TOTALE BOLLETTA €  174,89
+Azienda Autonoma di Stato per i Servizi Pubblici - Repubblica di San Marino
+Via Andrea di Superchio, 16 - 47893 Borgo Maggiore 
+Telefono +378 (0549) 883700/ Fax +378 (0549) 883720 - email: info@aass.sm - www.aass.sm
+Cod. Op. Econ. SM 02463
+Servizio Energia Elettrica Fattura n. 2022/1000885  Data Emissione 28/01/2022Pag.3 di 4
+COMUNICAZIONI AL CLIENTE
+MODALITA' DI PAGAMENTO
+In ottemperanza alla norma che regola la gestione dei pagamenti attraverso il nuovo sistema SEDA SDD 
+CORE, si informa la gentile clientela che i moduli di richiesta della domiciliazione bancaria dovranno essere 
+compilati e sottoscritti direttamente presso gli uffici della Azienda Autonoma di Stato per i Servizi Pubblici e non 
+più presso i singoli istituti Bancari di riferimento
+Per informazioni circa il contratto, la fattura ed i reclami, telefoni al numero 0549 883700.
+INTERESSI DI MORA
+In applicazione del Decreto Delegato 15 marzo 1999 n. 32 e Decreto Delegato del 10 marzo 2008 n.43
+Registrati su www.aass.sm  e risparmia
+AASS mette a disposizione di tutti gli utenti un modo facile e comodo per risparmiare tempo e denaro, 
+scegliendo di ricevere la bolletta via mail. E’ sufficiente registrarsi nella “Area Clienti” sul sito www.aass.sm, 
+sezione “Fatturazione” (riquadro blu), per:
+· Visualizzare e modificare i propri contatti (telefono, cellulare, e-mail);
+· consultare e scaricare sul proprio computer le singole fatture;
+· variare il recapito della fattura;
+· scegliere di ricevere le prossime fatture via email, in formato cartaceo o entrambi;
+· Visualizzare i propri consumi;
+· Inserire l’autolettura, al fine di avere una lettura del contatore sempre più effettiva.
+Sul sito www.aass.sm è presente la guida con tutte le informazioni.
+INFORMATIVA SUL TRATTAMENTO DEI DATI PERSONALI
+Le informazioni ed i dati forniti nell’ambito di procedimenti amministrativi e per la fruizione di servizi erogati da 
+A.A.S.S. saranno trattati in conformità all’Informativa pubblicata sul portale di A.A.S.S  www.aass.sm - “Informativa 
+per il trattamento dei dati personali”.
+Azienda Autonoma di Stato per i Servizi Pubblici - Repubblica di San Marino
+Via Andrea di Superchio, 16 - 47893 Borgo Maggiore 
+Telefono +378 (0549) 883700/ Fax +378 (0549) 883720 - email: info@aass.sm - www.aass.sm
+Cod. Op. Econ. SM 02463
+Servizio Energia Elettrica Fattura n. 2022/1000885  Data Emissione 28/01/2022Pag.4 di 4
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CEDOLA PAGAMENTI
+14/02/2022
+28/01/2022 1000885 2022
+202108 111157
+TAGLIANDO DA RITORNARE ALL'A.A.S.S.
+IMPORTO SCADENZA
+ANNO NR. FATTURA DATA FATTURA
+BANCAPERIODOCLIENTE
+14/02/2022
+28/01/2022 1000885 2022
+202108 111157
+TAGLIANDO PER L'ISTITUTO BANCARIO
+IMPORTO SCADENZA
+ANNO NR. FATTURA DATA FATTURA
+BANCAPERIODOCLIENTE
+*********
+CASSA DI RISPARMIO 
+DELLA REPUBBLICA DI 
+CASSA DI RISPARMIO 
+DELLA REPUBBLICA DI 
+*********
+201    450 13920 0000174,89 201    450 13920 0000174,89
+0111157202220220032208 0111157202220220032208
+Azienda Autonoma di Stato per i Servizi Pubblici - Repubblica di San Marino
+Via Andrea di Superchio, 16 - 47893 Borgo Maggiore 
+Telefono +378 (0549) 883700/ Fax +378 (0549) 883720 - email: info@aass.sm - www.aass.sm
+Cod. Op. Econ. SM 02463
+
