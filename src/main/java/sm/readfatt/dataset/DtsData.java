@@ -10,7 +10,8 @@ import lombok.Setter;
 
 public class DtsData {
 
-  protected static SimpleDateFormat s_dtfmt = new SimpleDateFormat("dd/MM/yyyy");
+  public static SimpleDateFormat s_dtfmtrev = new SimpleDateFormat("yyyyMMdd");
+  public static SimpleDateFormat s_dtfmt = new SimpleDateFormat("dd/MM/yyyy");
   private static NumberFormat     s_cyfmt = NumberFormat.getCurrencyInstance();
 
   @Getter @Setter private DtsCol  colonna;

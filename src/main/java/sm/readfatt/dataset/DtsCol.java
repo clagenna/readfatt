@@ -43,12 +43,15 @@ public class DtsCol {
     }
     String nome = arr[0];
     String tipo = arr[1];
-    String excRow = arr[2];
-    String excCol = arr[3];
+    String excCol = arr[2];
+    String excRow = arr[3];
     String seArr = "0";
     if (arr.length > 4)
       seArr = arr[4];
     ETipiDato tp = ETipiDato.decode(tipo);
+    if (excCol != null && excCol.equals("-"))
+      if (excRow == null || !excRow.equals("-"))
+        System.err.printf("Incongruenza Excel coord per %s con %s-%s !n", nome, excCol, excRow);
     setName(nome);
     setTipoDato(tp);
     setExcelrow(excRow);

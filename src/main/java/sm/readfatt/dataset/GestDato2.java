@@ -1,7 +1,5 @@
 package sm.readfatt.dataset;
 
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,8 +8,6 @@ import lombok.Setter;
 import sm.readfatt.dati.ETipiDato;
 
 public class GestDato2 {
-  private static SimpleDateFormat s_dtfmt = new SimpleDateFormat("dd/MM/yyyy");
-  private static NumberFormat     s_cyfmt = NumberFormat.getCurrencyInstance();
 
   @Getter @Setter private Dataset dataset;
   @Getter @Setter private DtsCol  colonna;
@@ -22,6 +18,14 @@ public class GestDato2 {
 
   static {
     s_patTag = Pattern.compile(".*\\$\\{([A-Za-z][A-Za-z0-9]+)\\}.*");
+  }
+
+  @Override
+  public String toString() {
+    String sz = "*gest.null*";
+    if ( colonna != null)
+      sz =String.format( "gest(%s) col=%s",civetta,colonna.toString());
+    return sz;
   }
 
   public GestDato2(Dataset pdts) {

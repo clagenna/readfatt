@@ -27,7 +27,10 @@ public class DtsRow {
     if (dati == null)
       dati = new DtsData[dataset.getColonne().size()];
     int k = pdata.getColonna().getColIndex();
-    dati[k] = pdata;
+    if (dati[k] != null) {
+      System.err.println("Doppia registrazione:" + pdata.toString() + " ==> " + dati[k].toString());
+    } else
+      dati[k] = pdata;
   }
 
   @Override
@@ -43,6 +46,21 @@ public class DtsRow {
       sz += l;
     }
     return sz;
+  }
+
+  public Object getValue(String p_campo) {
+    if (dati == null)
+      return null;
+    DtsCol col = dataset.getColonna(p_campo);
+    int k = col.getColIndex();
+    if (dati.length < k) {
+      System.err.printf("Non esiste la colonna %s index %d\n", p_campo, k);
+      return null;
+    }
+    DtsData dato = dati[k];
+    if (dato == null)
+      return null;
+    return dato.getDato();
   }
 
 }

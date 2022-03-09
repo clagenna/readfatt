@@ -79,7 +79,7 @@ public class Dataset {
 
   public void parseRiga(String p_sz) {
     for (GestRiga2 gr : m_liGestRiga) {
-      if (gr.parseRiga(p_sz))
+      if (gr.parseRiga(p_sz.replace("\r", "")))
         break;
     }
 
@@ -87,14 +87,14 @@ public class Dataset {
 
   public DtsData addData(DtsData pdata) {
     DtsRow riga = null;
-    boolean newRow = pdata.getColonna().isMultiRow();
+    boolean bNewRow = pdata.getColonna().isMultiRow();
     if (righe.size() == 0) {
       riga = new DtsRow(this);
       righe.add(riga);
     }
     // con newrow scrivo (eventualmente) su nuova riga
     // altrimenti scrivo sempre sulla zero
-    if (newRow) {
+    if (bNewRow) {
       riga = righe.get(currentRow);
       if ( !riga.isLibero(pdata)) {
         riga = new DtsRow(this);
@@ -148,6 +148,23 @@ public class Dataset {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  /**
+   * se fornisco i<0 allora torno l'ultima riga
+   * 
+   * @param string
+   * @param i
+   * @return
+   */
+  public Object getValue(String string, int i) {
+    int k = i;
+    if (k < 0)
+      k = righe.size() - 1;
+    if (k > righe.size() - 1)
+      throw new ArrayIndexOutOfBoundsException(k);
+    DtsRow riga = righe.get(k);
+    return riga.getValue(string);
   }
 
 }
