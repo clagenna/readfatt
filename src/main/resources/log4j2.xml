@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+  <Appenders>
+
+    <Console name="console" target="SYSTEM_OUT">
+      <!--  PatternLayout pattern="%d %-5p  %-32F:%L - %m%n" / -->
+      <PatternLayout pattern="%-32c  %d{yyyy-MM-dd HH:mm:ss} %-5p: %m%n"/>
+    </Console>
+
+    <File name="readfatt" fileName="log/readfatt.log" append="true">
+      <PatternLayout pattern="%-32c  %d{yyyy-MM-dd HH:mm:ss} %-5p: %m%n"/>
+    </File>
+
+  </Appenders>
+
+  <Loggers>
+    <Root level="debug">
+      <AppenderRef ref="console"/>
+      <AppenderRef ref="readfatt"/>
+    </Root>	
+  </Loggers>
+
+</Configuration>

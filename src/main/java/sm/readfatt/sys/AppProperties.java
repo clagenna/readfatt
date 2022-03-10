@@ -8,15 +8,20 @@ import java.io.InputStream;
 import java.util.Date;
 import java.util.Properties;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import lombok.Getter;
-import lombok.Setter;
 import sm.readfatt.sys.ex.ReadFattPropsException;
 
 public class AppProperties {
+  private static final Logger  s_log         = LogManager.getLogger(AppProperties.class);
+
   private static AppProperties s_inst;
 
   private Properties           properties;
-  @Getter @Setter private File propertyFile;
+  @Getter
+  private File                 propertyFile;
 
   /**
    * codoe X email di servizio, non pertinenti ad un OE specifico ma prettamente
@@ -26,15 +31,15 @@ public class AppProperties {
   public static final String   PROP_BASE_DIR = "app.basedir";
 
   public AppProperties() throws ReadFattPropsException {
-    if (s_inst == null)
-      s_inst = this;
+    if (AppProperties.s_inst == null)
+      AppProperties.s_inst = this;
     else {
       throw new ReadFattPropsException("App Prop. gia istanziato !");
     }
   }
 
   public static AppProperties getInstance() {
-    return s_inst;
+    return AppProperties.s_inst;
   }
 
   public Properties getProperties() {
@@ -65,15 +70,17 @@ public class AppProperties {
       throw new ReadFattPropsException(
           "Il file properties non esiste:" + (p_fiProp != null ? p_fiProp.getAbsolutePath() : "*NULL*"));
     }
-    System.out.println("Apro il file di  properties:" + p_fiProp.getAbsolutePath());
+    // System.out.println("Apro il file di  properties:" + p_fiProp.getAbsolutePath());
+    s_log.info("Apro il file di  properties: {}", p_fiProp.getAbsolutePath());
     setPropertyFile(p_fiProp);
     try (InputStream is = new FileInputStream(p_fiProp)) {
       properties = new Properties();
       properties.load(is);
       setPropertyFile(p_fiProp);
     } catch (IOException e) {
-      e.printStackTrace();
-      System.err.println("Errore apertura property file:" + p_fiProp.getAbsolutePath() + " " + e);
+      s_log.error("Errore apertura property file {}", p_fiProp.getAbsolutePath(), e);
+      // e.printStackTrace();
+      // System.err.println("Errore apertura property file:" + p_fiProp.getAbsolutePath() + " " + e);
     }
     return properties;
   }

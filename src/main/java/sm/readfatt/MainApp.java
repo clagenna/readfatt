@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.pdfbox.io.RandomAccessBufferedFileInputStream;
 import org.apache.pdfbox.io.RandomAccessRead;
 import org.apache.pdfbox.pdfparser.PDFParser;
@@ -38,6 +40,7 @@ import sm.readfatt.sys.ex.ReadFattException;
 import sm.readfatt.sys.ex.ReadFattPDFException;
 
 public class MainApp {
+  private static final Logger s_log       = LogManager.getLogger(MainApp.class);
   private static final String CSZ_XLSXSRC = "dati/Fattura_Templ.xlsx";
   private File                m_pdfFile;
   private String              m_pdfText;
@@ -57,6 +60,8 @@ public class MainApp {
       app.init(args);
       app.vaiColTango();
     } catch (ReadFattException e) {
+      MainApp.s_log.error("Parse cmd error", e);
+
       e.printStackTrace();
     }
   }
@@ -194,7 +199,7 @@ public class MainApp {
     String szNomeSheet = Utils.s_fmtY4MD.format(lastDt);
     m_szXlsxFile = String.format("EE_%s.xlsx", szNomeSheet);
     Workbook srcwkb = null;
-    try (InputStream fiin = new FileInputStream(new File(CSZ_XLSXSRC))) {
+    try (InputStream fiin = new FileInputStream(new File(MainApp.CSZ_XLSXSRC))) {
       srcwkb = new XSSFWorkbook(fiin);
     } catch (IOException e) {
       e.printStackTrace();

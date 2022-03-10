@@ -5,6 +5,8 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,14 +14,19 @@ import sm.readfatt.sys.ex.ReadFattCmdLineException;
 
 public class ParseCmdLine {
 
-  private static ParseCmdLine    s_inst;
+  private static final Logger s_log        = LogManager.getLogger(ParseCmdLine.class);
+  private static ParseCmdLine s_inst;
 
-  public static final String    CSZ_PDFINPUT = "f";
-  public static final String    CSZ_PROPERTY = "p";
+  public static final String  CSZ_PDFINPUT = "f";
+  public static final String  CSZ_PROPERTY = "p";
 
-  private Options                m_opt;
-  @Getter @Setter private String propertyFile;
-  @Getter @Setter private String PDFFatt;
+  private Options             m_opt;
+  @Getter
+  @Setter
+  private String              propertyFile;
+  @Getter
+  @Setter
+  private String              PDFFatt;
 
   public ParseCmdLine() {
     ParseCmdLine.s_inst = this;
@@ -47,6 +54,7 @@ public class ParseCmdLine {
       CommandLine cmd = prs.parse(m_opt, p_args);
       discerniCommandi(cmd);
     } catch (ParseException e) {
+      s_log.error("Parse cmd error", e);
       throw new ReadFattCmdLineException("Parse cmd line", e);
     }
   }
