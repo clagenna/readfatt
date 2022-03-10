@@ -3,19 +3,17 @@ package sm.readfatt.dataset;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import lombok.Getter;
 import lombok.Setter;
+import sm.readfatt.sys.Utils;
 
 public class DtsData {
 
-  public static SimpleDateFormat s_dtfmtrev = new SimpleDateFormat("yyyyMMdd");
-  public static SimpleDateFormat s_dtfmt = new SimpleDateFormat("dd/MM/yyyy");
-  private static NumberFormat     s_cyfmt = NumberFormat.getCurrencyInstance();
+  private static NumberFormat    s_cyfmt = NumberFormat.getCurrencyInstance();
 
-  @Getter @Setter private DtsCol  colonna;
-  @Getter @Setter private Object  dato;
+  @Getter @Setter private DtsCol colonna;
+  @Getter @Setter private Object dato;
 
   public DtsData(DtsCol pcol) {
     setColonna(pcol);
@@ -27,7 +25,7 @@ public class DtsData {
     try {
       switch (colonna.getTipoDato()) {
         case Data:
-          dato = s_dtfmt.parse(p_sz);
+          dato = Utils.s_fmtDMY4.parse(p_sz);
           break;
         case Float:
           sz = p_sz.replace(",", ".");
@@ -72,7 +70,7 @@ public class DtsData {
     if (dato != null) {
       switch (colonna.getTipoDato()) {
         case Data:
-          sz = s_dtfmt.format(dato);
+          sz = Utils.s_fmtDMY4.format(dato);
           break;
         case Float:
           sz = String.format("%.2f", dato);

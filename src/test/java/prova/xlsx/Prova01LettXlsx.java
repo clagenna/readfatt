@@ -3,8 +3,6 @@ package prova.xlsx;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,10 +16,11 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import sm.readfatt.sys.Utils;
+
 public class Prova01LettXlsx {
 
-  private static final String     CSZ_XLSX = "dati/Fattura_Templ.xlsx";
-  private static final DateFormat s_dtfmt  = new SimpleDateFormat("dd/MM/yyyy");
+  private static final String CSZ_XLSX = "dati/Fattura_Templ.xlsx";
 
   public static void main(String[] args) {
 
@@ -58,7 +57,7 @@ public class Prova01LettXlsx {
             if (DateUtil.isCellDateFormatted(cell)) {
               Date dt = cell.getDateCellValue();
               data.get(iRow).add(dt + "");
-              System.out.printf("%d:%d:dt=%s\t", iRow, iCol, s_dtfmt.format(dt));
+              System.out.printf("%d:%d:dt=%s\t", iRow, iCol, Utils.s_fmtDMY4.format(dt));
             } else {
               double nu = cell.getNumericCellValue();
               data.get(iRow).add(nu + "");

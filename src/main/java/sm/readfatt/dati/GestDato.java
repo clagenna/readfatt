@@ -3,19 +3,18 @@ package sm.readfatt.dati;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import lombok.Getter;
 import lombok.Setter;
+import sm.readfatt.sys.Utils;
 
 public class GestDato {
 
-  private static SimpleDateFormat s_dtfmt = new SimpleDateFormat("dd/MM/yyyy");
-  private static NumberFormat     s_cyfmt = NumberFormat.getCurrencyInstance();
+  private static NumberFormat s_cyfmt = NumberFormat.getCurrencyInstance();
 
-  private static Pattern          s_patTag;
+  private static Pattern      s_patTag;
 
   static {
     s_patTag = Pattern.compile(".*\\$\\{([A-Za-z][A-Za-z0-9:\\-]+)\\}.*");
@@ -95,7 +94,7 @@ public class GestDato {
     try {
       switch (tipoDato) {
         case Data:
-          dato = s_dtfmt.parse(p_sz);
+          dato = Utils.s_fmtDMY4.parse(p_sz);
           break;
         case Float:
           sz = p_sz.replace(",", ".");
@@ -129,7 +128,7 @@ public class GestDato {
     if (dato != null) {
       switch (tipoDato) {
         case Data:
-          sz = s_dtfmt.format(dato);
+          sz = Utils.s_fmtDMY4.format(dato);
           break;
         case Float:
           sz = String.format("%.2f", dato);

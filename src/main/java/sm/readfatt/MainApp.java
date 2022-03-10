@@ -2,7 +2,6 @@ package sm.readfatt;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,8 +30,12 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import sm.readfatt.dataset.Dataset;
 import sm.readfatt.dataset.DtsCol;
-import sm.readfatt.dataset.DtsData;
 import sm.readfatt.dataset.DtsRow;
+import sm.readfatt.sys.AppProperties;
+import sm.readfatt.sys.ParseCmdLine;
+import sm.readfatt.sys.Utils;
+import sm.readfatt.sys.ex.ReadFattException;
+import sm.readfatt.sys.ex.ReadFattPDFException;
 
 public class MainApp {
   private static final String CSZ_XLSXSRC = "dati/Fattura_Templ.xlsx";
@@ -42,6 +45,7 @@ public class MainApp {
   private XSSFWorkbook        m_dstwkb;
   private String              m_szXlsxFile;
   private XSSFSheet           m_dstsh;
+  private AppProperties       m_props;
 
   public MainApp() {
     //
@@ -49,43 +53,49 @@ public class MainApp {
 
   public static void main(String[] args) {
     MainApp app = new MainApp();
-    if (args.length <= 0) {
-      System.out.println("Devi fornire il PDF");
-      return;
-    }
-    String sz = args[0];
-    File fi = new File(sz);
-    if ( !fi.exists()) {
-      System.out.printf("Il file \"%s\" non esiste\n", sz);
-      return;
-    }
-    app.vaiColTango(fi);
-  }
-
-  private void vaiColTango(File fi) {
-    m_pdfFile = fi;
     try {
-      m_pdfText = convertPDFDocument(m_pdfFile);
-      m_dts = creaDataset();
-      analizzaFilePDF();
-      m_dts.printData();
-      copiaXlsxTempl();
-      copiaDatiInXlsx();
-      salvaXlsx();
-      lanciaExcel();
-    } catch (IOException e) {
+      app.init(args);
+      app.vaiColTango();
+    } catch (ReadFattException e) {
       e.printStackTrace();
     }
   }
 
-  private String convertPDFDocument(File fi) throws FileNotFoundException, IOException {
-    PDFTextStripper stripper = new PDFTextStripper();
-    RandomAccessRead rndacc = new RandomAccessBufferedFileInputStream(fi);
-    PDFParser parser = new PDFParser(rndacc);
-    parser.parse();
-    PDDocument doc = parser.getPDDocument();
-    String text = stripper.getText(doc);
-    doc.close();
+  private void init(String[] p_args) throws ReadFattException {
+    ParseCmdLine cmdParse = new ParseCmdLine();
+    cmdParse.parse(p_args);
+    String fiProp = cmdParse.getPropertyFile();
+    m_props = new AppProperties();
+    m_props.leggiPropertyFile(fiProp);
+    m_pdfFile = new File(cmdParse.getPDFFatt());
+  }
+
+  private void vaiColTango() throws ReadFattException {
+    m_pdfText = convertPDFDocument(m_pdfFile);
+    // m_dts = creaDataset();
+    m_dts = new Dataset();
+    m_dts.readPropertyFields();
+    analizzaFilePDF();
+    m_dts.printData();
+    copiaXlsxTempl();
+    copiaDatiInXlsx();
+    salvaXlsx();
+    lanciaExcel();
+  }
+
+  private String convertPDFDocument(File fi) throws ReadFattPDFException {
+    String text;
+    try {
+      PDFTextStripper stripper = new PDFTextStripper();
+      RandomAccessRead rndacc = new RandomAccessBufferedFileInputStream(fi);
+      PDFParser parser = new PDFParser(rndacc);
+      parser.parse();
+      PDDocument doc = parser.getPDDocument();
+      text = stripper.getText(doc);
+      doc.close();
+    } catch (IOException e) {
+      throw new ReadFattPDFException(String.format("Err. convers.", fi.getAbsolutePath()));
+    }
     return text;
   }
 
@@ -181,7 +191,7 @@ public class MainApp {
 
   private void copiaXlsxTempl() {
     Date lastDt = cercaLastDate();
-    String szNomeSheet = DtsData.s_dtfmtrev.format(lastDt);
+    String szNomeSheet = Utils.s_fmtY4MD.format(lastDt);
     m_szXlsxFile = String.format("EE_%s.xlsx", szNomeSheet);
     Workbook srcwkb = null;
     try (InputStream fiin = new FileInputStream(new File(CSZ_XLSXSRC))) {
@@ -206,9 +216,7 @@ public class MainApp {
         int exlRow = parseExcelRow(col.getExcelrow());
         int exlCol = parseExcelCol(col.getExcelcol());
         boolean bMultiRow = col.isMultiRow();
-        if (exlCol * exlRow == 0)
-          continue;
-        if ( !bMultiRow && k > 0)
+        if ( (exlCol * exlRow == 0) || ( !bMultiRow && k > 0))
           continue;
         exlRow += k;
         // -------------------------------

@@ -3,7 +3,6 @@ package sm.readfatt.dataset;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -13,6 +12,8 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import sm.readfatt.dati.ETipiDato;
+import sm.readfatt.sys.AppProperties;
+import sm.readfatt.sys.Utils;
 
 public class Dataset {
 
@@ -72,6 +73,34 @@ public class Dataset {
     m_liGestRiga.add(gr);
   }
 
+  public void readPropertyFields() {
+    AppProperties prop = AppProperties.getInstance();
+    // leggo le colonne con dts.colNN
+    for (int i = 1; i < 100; i++) {
+      String szKeyCol = String.format("dts.col%02d", i);
+      String szCol = prop.getProperty(szKeyCol);
+      // se sono finite le colonne
+      if (szCol == null)
+        break;
+      System.out.printf("prp.col:%s=%s\n", szKeyCol, szCol);
+      addCol(szCol);
+    }
+
+    // leggo le espressioni regolari con dts.regexNN
+    for (int i = 1; i < 100; i++) {
+      String szKeyRgx = String.format("dts.regex%02d", i);
+      String szKeyRgxCiv = String.format("dts.regex%02d.civ", i);
+      String szRegx = prop.getProperty(szKeyRgx);
+      // se sono finite le reg exp
+      if (szRegx == null)
+        break;
+      String szRegxCiv = prop.getProperty(szKeyRgxCiv);
+      System.out.printf("prp.regx(%s):%s=%s\n", (szRegxCiv == null ? "" : szRegxCiv), szKeyRgx, szRegx);
+      addRegexRiga(szRegx, szRegxCiv);
+    }
+
+  }
+
   public DtsCol getColonna(String pnome) {
     DtsCol col = m_mapCol.get(pnome);
     return col;
@@ -112,8 +141,7 @@ public class Dataset {
   }
 
   public void printData() {
-    SimpleDateFormat dtfmt = new SimpleDateFormat("yyyyMMdd_HHmmss");
-    String sz = dtfmt.format(new Date());
+    String sz = Utils.s_fmt_ymd4hms.format(new Date());
     String szFilNam = String.format("dati/Dataset_out_%s.txt", sz);
     try (PrintWriter pwr = new PrintWriter(new File(szFilNam))) {
       if (righe == null) {
@@ -135,7 +163,7 @@ public class Dataset {
           if (da != null) {
             Object obj = da.getDato();
             if (obj instanceof Date)
-              sz = DtsData.s_dtfmt.format((Date) obj);
+              sz = Utils.s_fmtDMY4.format((Date) obj);
             else
               sz = String.valueOf(da.getDato());
           }
@@ -152,7 +180,7 @@ public class Dataset {
 
   /**
    * se fornisco i<0 allora torno l'ultima riga
-   * 
+   *
    * @param string
    * @param i
    * @return
