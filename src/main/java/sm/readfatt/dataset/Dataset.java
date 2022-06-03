@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import lombok.Getter;
 import lombok.Setter;
 import sm.readfatt.dati.ETipiDato;
@@ -16,13 +19,17 @@ import sm.readfatt.sys.AppProperties;
 import sm.readfatt.sys.Utils;
 
 public class Dataset {
+  private static final Logger s_log = LogManager.getLogger(Dataset.class);
+  @Getter
+  @Setter
+  private List<DtsCol>        colonne;
+  private Map<String, DtsCol> m_mapCol;
+  private List<GestRiga2>     m_liGestRiga;
 
-  @Getter @Setter private List<DtsCol> colonne;
-  private Map<String, DtsCol>          m_mapCol;
-  private List<GestRiga2>              m_liGestRiga;
-
-  @Getter @Setter private List<DtsRow> righe;
-  private int                          currentRow;
+  @Getter
+  @Setter
+  private List<DtsRow>        righe;
+  private int                 currentRow;
 
   public Dataset() {
     init();
@@ -57,8 +64,8 @@ public class Dataset {
    * <ol>
    * <li>il nome del campo</li>
    * <li>la tipologia di campo dal enumerato {@link ETipiDato}</li>
-   * <li>la riga Excel di destinazione</li>
-   * <li>la colonna Excel di destinazione</li>
+   * <li>la riga Excel di destinazione (oppure '-' se non esiste)</li>
+   * <li>la colonna Excel di destinazione (oppure '-' se non esiste)</li>
    * </ol>
    * il metodo interpreta i vari tag e li aggiunge con
    * {@link #addField(String, ETipiDato)}
@@ -82,7 +89,7 @@ public class Dataset {
       // se sono finite le colonne
       if (szCol == null)
         break;
-      System.out.printf("prp.col:%s=%s\n", szKeyCol, szCol);
+      s_log.debug("prp.col:{}={}", szKeyCol, szCol);
       addCol(szCol);
     }
 
@@ -95,10 +102,10 @@ public class Dataset {
       if (szRegx == null)
         break;
       String szRegxCiv = prop.getProperty(szKeyRgxCiv);
-      System.out.printf("prp.regx(%s):%s=%s\n", (szRegxCiv == null ? "" : szRegxCiv), szKeyRgx, szRegx);
+      s_log.debug("prp.regx({}):{}={}", //
+          (szRegxCiv == null ? "" : szRegxCiv), szKeyRgx, szRegx);
       addRegexRiga(szRegx, szRegxCiv);
     }
-
   }
 
   public DtsCol getColonna(String pnome) {

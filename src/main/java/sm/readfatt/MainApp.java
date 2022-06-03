@@ -19,6 +19,7 @@ import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
@@ -30,6 +31,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import lombok.extern.log4j.Log4j2;
 import sm.readfatt.dataset.Dataset;
 import sm.readfatt.dataset.DtsCol;
 import sm.readfatt.dataset.DtsRow;
@@ -39,6 +41,7 @@ import sm.readfatt.sys.Utils;
 import sm.readfatt.sys.ex.ReadFattException;
 import sm.readfatt.sys.ex.ReadFattPDFException;
 
+@Log4j2
 public class MainApp {
   private static final Logger s_log       = LogManager.getLogger(MainApp.class);
   private static final String CSZ_XLSXSRC = "dati/Fattura_Templ.xlsx";
@@ -61,8 +64,7 @@ public class MainApp {
       app.vaiColTango();
     } catch (ReadFattException e) {
       MainApp.s_log.error("Parse cmd error", e);
-
-      e.printStackTrace();
+      // e.printStackTrace();
     }
   }
 
@@ -77,6 +79,8 @@ public class MainApp {
 
   private void vaiColTango() throws ReadFattException {
     m_pdfText = convertPDFDocument(m_pdfFile);
+    if ( !verificaSeCorretto())
+      return;
     // m_dts = creaDataset();
     m_dts = new Dataset();
     m_dts.readPropertyFields();
@@ -84,6 +88,7 @@ public class MainApp {
     m_dts.printData();
     copiaXlsxTempl();
     copiaDatiInXlsx();
+    cancellaRigheConZero();
     salvaXlsx();
     lanciaExcel();
   }
@@ -91,101 +96,35 @@ public class MainApp {
   private String convertPDFDocument(File fi) throws ReadFattPDFException {
     String text;
     try {
-      PDFTextStripper stripper = new PDFTextStripper();
-      RandomAccessRead rndacc = new RandomAccessBufferedFileInputStream(fi);
-      PDFParser parser = new PDFParser(rndacc);
+      PDFTextStripper  stripper = new PDFTextStripper();
+      RandomAccessRead rndacc   = new RandomAccessBufferedFileInputStream(fi);
+      PDFParser        parser   = new PDFParser(rndacc);
       parser.parse();
       PDDocument doc = parser.getPDDocument();
       text = stripper.getText(doc);
       doc.close();
     } catch (IOException e) {
-      throw new ReadFattPDFException(String.format("Err. convers.", fi.getAbsolutePath()));
+      text = String.format("Err. parse PDF %s", fi.getAbsolutePath());
+      MainApp.s_log.error(text, e);
+      throw new ReadFattPDFException(text);
     }
     return text;
   }
 
-  private Dataset creaDataset() {
-    Dataset dts = new Dataset();
-    // Credito precedente anno 2020: 633 kWh
-    dts.addCol("CredAnnoPrec:i:h:2");
-    dts.addCol("CredKwhPrec:i:i:2");
-
-    // Credito attuale anno 2020: 0 kWh
-    dts.addCol("CredAnnoAttuale:i:h:3");
-    dts.addCol("CredKwhAtt:i:i:3");
-
-    // Corrispettivo potenza impegnata 01/05/2021 31/05/2021  0,896910  4,50  4,04�/KW
-    dts.addCol("PotDtDa:d:-:-");
-    dts.addCol("PotDtA:d:-:-");
-    dts.addCol("PotCostUnit:f:-:-");
-    dts.addCol("PotContatore:f:f:2");
-    dts.addCol("PotTotale:f:-:-");
-
-    // Corrispettivo energia 01/07/2021 31/07/2021  0,089450  163  14,58�/kWh1� scaglione
-    dts.addCol("EneDtDa:d:-:-:1");
-    dts.addCol("EneDtA:d:-:-:1");
-    dts.addCol("EneCostoUnit:f:l:2");
-    dts.addCol("EneQta:i:-:-:1");
-    dts.addCol("EneTotale:f:-:-:1");
-
-    // Corrispettivo energia 01/07/2021 31/07/2021  0,089450  163  14,58�/kWh2� scaglione
-    dts.addCol("Ene2DtDa:d:-:-:1");
-    dts.addCol("Ene2DtA:d:-:-:1");
-    dts.addCol("Ene2CostoUnit:f:l:3");
-    dts.addCol("Ene2Qta:i:-:-:1");
-    dts.addCol("Ene2Totale:f:-:-:1");
-
-    // Tariffa raccolta rifiuti 01/08/2021 31/08/2021  0,059130  45  2,66�/kWh
-    dts.addCol("RifiutiDtDa:d:-:-:1");
-    dts.addCol("RifiutiDtA:d:-:-:1");
-    dts.addCol("RifiutiCostoUnit:f:n:1");
-    dts.addCol("RifiutiQta:i:-:-:1");
-    dts.addCol("RifiutiTotale:f:-:-:1");
-
-    dts.addCol("FattNo:br:e:1");
-    dts.addCol("DataEmiss:d:-:-");
-    dts.addCol("TotPagare:cy:b:2");
-
-    // 30/04/2021 31/05/2021Energia Attiva  25.173 24.879 LETTURA REALE  294,00  1,00
-    dts.addCol("LettDtPrec:d:-:-:1");
-    dts.addCol("LettDtAttuale:d:c:5:1");
-    dts.addCol("LettAttuale:i:e:5:1}");
-    dts.addCol("LettPrec:i:d:5:1");
-    dts.addCol("LettConsumo:f:-:-:1");
-    dts.addCol("LettCoeffK:f:-:-:1");
-
-    String regx = "Servizio Energia Elettrica Fattura n. +${FattNo} +Data Emissione ${DataEmiss}.*";
-    dts.addRegexRiga(regx, "Servizio Energia Elettrica");
-
-    regx = "^${TotPagare}.*";
-    dts.addRegexRiga(regx);
-
-    regx = "Credito precedente anno ${CredAnnoPrec}: ${CredKwhPrec} +kWh";
-    dts.addRegexRiga(regx, "Credito precedente");
-
-    regx = "Credito attuale anno ${CredAnnoAttuale}: +${CredKwhAtt} +kWh";
-    dts.addRegexRiga(regx, "Credito attuale");
-
-    regx = "${LettDtPrec} ${LettDtAttuale}Energia Attiva +${LettAttuale} ${LettPrec} LETTURA REALE +${LettConsumo} +${LettCoeffK}";
-    dts.addRegexRiga(regx, "LETTURA REALE");
-
-    regx = "Corrispettivo +potenza +impegnata +${PotDtDa} +${PotDtA} +${PotCostUnit} +${PotContatore} +${PotTotale}./KW";
-    dts.addRegexRiga(regx, "potenza impegnata");
-
-    regx = "Corrispettivo +energia +${EneDtDa} +${EneDtA} +${EneCostoUnit} +${EneQta} +${EneTotale}./kWh1. +scaglione";
-    dts.addRegexRiga(regx, "Corrispettivo energia.*1. scaglione");
-    regx = "Corrispettivo +energia +${Ene2DtDa} +${Ene2DtA} +${Ene2CostoUnit} +${Ene2Qta} +${Ene2Totale}./kWh2. +scaglione";
-    dts.addRegexRiga(regx, "Corrispettivo energia.*2. scaglione");
-
-    regx = "Tariffa +raccolta +rifiuti +${RifiutiDtDa} +${RifiutiDtA} +${RifiutiCostoUnit} +${RifiutiQta} +${RifiutiTotale}./kWh";
-    dts.addRegexRiga(regx, "raccolta rifiuti");
-
-    return dts;
+  private boolean verificaSeCorretto() {
+    String szIdDoc = m_props.getProperty("IdDoc");
+    if (szIdDoc == null) {
+      log.error("Non trovo nelle properties \"IdDcc\"");
+    }
+    long nRows = Arrays.stream(m_pdfText.split("\\n")) //
+        .filter(s -> s.contains(szIdDoc)) //
+        .count();
+    return nRows >= 1;
   }
 
   private void analizzaFilePDF() {
-    Stream<String> stre = Arrays.stream(m_pdfText.split("\\n"));
-    stre.forEach(s -> analizzaRiga(s));
+    Arrays.stream(m_pdfText.split("\\n")) // 
+        .forEach(s -> analizzaRiga(s));
   }
 
   private void analizzaRiga(String p_sz) {
@@ -195,14 +134,15 @@ public class MainApp {
   }
 
   private void copiaXlsxTempl() {
-    Date lastDt = cercaLastDate();
+    Date   lastDt      = cercaLastDate();
     String szNomeSheet = Utils.s_fmtY4MD.format(lastDt);
     m_szXlsxFile = String.format("EE_%s.xlsx", szNomeSheet);
     Workbook srcwkb = null;
     try (InputStream fiin = new FileInputStream(new File(MainApp.CSZ_XLSXSRC))) {
       srcwkb = new XSSFWorkbook(fiin);
     } catch (IOException e) {
-      e.printStackTrace();
+      s_log.error("Errore open Xlsx template", e);
+      // e.printStackTrace();
     }
     Sheet srcsh = srcwkb.getSheetAt(0);
     m_dstwkb = new XSSFWorkbook();
@@ -211,17 +151,17 @@ public class MainApp {
   }
 
   private void copiaDatiInXlsx() {
-    int k = 0;
+    int    k  = 0;
     String sz = null;
     for (DtsRow riga : m_dts.getRighe()) {
       for (DtsCol col : m_dts.getColonne()) {
         Object val = riga.getValue(col.getName());
         if (val == null)
           continue;
-        int exlRow = parseExcelRow(col.getExcelrow());
-        int exlCol = parseExcelCol(col.getExcelcol());
+        int     exlRow    = parseExcelRow(col.getExcelrow());
+        int     exlCol    = parseExcelCol(col.getExcelcol());
         boolean bMultiRow = col.isMultiRow();
-        if ( (exlCol * exlRow == 0) || ( !bMultiRow && k > 0))
+        if ( (exlCol == 0 && exlRow == 0) || ( !bMultiRow && k > 0))
           continue;
         exlRow += k;
         // -------------------------------
@@ -234,46 +174,7 @@ public class MainApp {
           System.err.printf("La cella %s e' *null* !", col.toString());
           dstcell = exRow.createCell(exlCol);
         }
-        //        switch (dstcell.getCellType()) {
-        //
-        //          case BLANK:
-        //          case _NONE:
-        //            dstcell.setCellValue(String.valueOf(val));
-        //            break;
-        //
-        //          case BOOLEAN:
-        //            boolean boo = Boolean.parseBoolean(val.toString());
-        //            dstcell.setCellValue(Boolean.valueOf(boo));
-        //            break;
-        //
-        //          case ERROR:
-        //            dstcell.setCellValue("*err*");
-        //            break;
-        //
-        //          case FORMULA:
-        //            System.err.printf("formula in cella (%d,%d)\n", exlRow, exlCol);
-        //            break;
-        //
-        //          case NUMERIC:
-        //            if (DateUtil.isCellDateFormatted(dstcell)) {
-        //              Date dt = (Date) val;
-        //              dstcell.setCellValue(dt);
-        //            } else {
-        //              double dbl = Double.parseDouble(val.toString());
-        //              dstcell.setCellValue(dbl);
-        //            }
-        //            break;
-        //
-        //          case STRING:
-        //            sz = val.toString();
-        //            dstcell.setCellValue(sz);
-        //            break;
-        //
-        //          default:
-        //            System.err.println("case default ?!?");
-        //            break;
-        //
-        //        }
+
         switch (col.getTipoDato()) {
           case Barrato:
           case Stringa:
@@ -292,11 +193,56 @@ public class MainApp {
             dstcell.setCellValue(dbl);
             break;
           default:
+            s_log.warn("Tipo {} della Colonna {} non considerato", col.getTipoDato(), col.toString());
             break;
         }
       }
       k++;
     }
+  }
+
+  private void cancellaRigheConZero() {
+    final int nColEneAtt =0;
+    final int nColDtLett  = 2;
+    final int nColAttuale = 4;
+    boolean bEneAtt = false;
+    int nRowDel = 0;
+    
+    for (int nRow = 0; nRow < 20; nRow++) {
+      XSSFRow row = m_dstsh.getRow(nRow);
+      if (row == null)
+        break;
+      XSSFCell eneAtt  = row.getCell(nColEneAtt);
+      if ( ! bEneAtt && eneAtt != null) {
+        // DateUtil.isCellDateFormatted(
+       CellType typ = eneAtt.getCellType();
+       if ( typ != null && typ == CellType.STRING) {
+         String sz = eneAtt.getStringCellValue();
+         if ( sz != null) {
+           bEneAtt = sz.compareTo("Energia attiva") == 0;
+         }
+       }
+      }
+      if ( !bEneAtt)
+        continue;
+      XSSFCell dtLett  = row.getCell(nColDtLett);
+      if ( ! DateUtil.isCellDateFormatted(dtLett))
+        continue;
+      XSSFCell attuale = row.getCell(nColAttuale);
+      if ( attuale == null)
+        continue;
+      System.out.printf("cancellaRigheConZero(dt=%s, att=%s)\n", dtLett, attuale);
+      CellType typ = attuale.getCellType();
+      if ( typ == CellType.NUMERIC) {
+        double ii = attuale.getNumericCellValue();
+        if ( ii == 0) {
+          if ( ++nRowDel > 4 )
+            break;
+          m_dstsh.removeRow(row);
+        }
+      }
+    }
+
   }
 
   private int parseExcelRow(String excelrow) {
@@ -327,19 +273,21 @@ public class MainApp {
       m_dstwkb.write(fou);
       m_dstwkb.close();
     } catch (IOException e) {
-      e.printStackTrace();
+      s_log.error("Errore Salva Excel", e);
+      // e.printStackTrace();
     }
 
   }
 
   private void lanciaExcel() {
     try {
-      File fi = new File(m_szXlsxFile);
-      String sz = fi.getAbsolutePath();
+      File   fi    = new File(m_szXlsxFile);
+      String sz    = fi.getAbsolutePath();
       String szCmd = String.format("cmd /c start excel.exe \"%s\"", sz);
       Runtime.getRuntime().exec(szCmd);
     } catch (IOException e) {
-      e.printStackTrace();
+      MainApp.s_log.error("Errore lancio Excel", e);
+      // e.printStackTrace();
     }
   }
 
@@ -352,9 +300,9 @@ public class MainApp {
 
   private void copyWorkb(Sheet srcsh, XSSFSheet dstsh) {
     Map<XSSFCellStyle, XSSFCellStyle> mapSty = new HashMap<>();
-    String sz = null;
-    int riga = 0;
-    int col = 0;
+    String                            sz     = null;
+    int                               riga   = 0;
+    int                               col    = 0;
     for (Row srcrow : srcsh) {
       riga = srcrow.getRowNum();
       Row dstrow = dstsh.createRow(riga);

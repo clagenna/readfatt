@@ -3,6 +3,7 @@ package sm.readfatt.sys;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
@@ -14,19 +15,15 @@ import sm.readfatt.sys.ex.ReadFattCmdLineException;
 
 public class ParseCmdLine {
 
-  private static final Logger s_log        = LogManager.getLogger(ParseCmdLine.class);
-  private static ParseCmdLine s_inst;
+  private static final Logger    s_log        = LogManager.getLogger(ParseCmdLine.class);
+  private static ParseCmdLine    s_inst;
 
-  public static final String  CSZ_PDFINPUT = "f";
-  public static final String  CSZ_PROPERTY = "p";
+  public static final String     CSZ_PDFINPUT = "f";
+  public static final String     CSZ_PROPERTY = "p";
 
-  private Options             m_opt;
-  @Getter
-  @Setter
-  private String              propertyFile;
-  @Getter
-  @Setter
-  private String              PDFFatt;
+  private Options                m_opt;
+  @Getter @Setter private String propertyFile;
+  @Getter @Setter private String PDFFatt;
 
   public ParseCmdLine() {
     ParseCmdLine.s_inst = this;
@@ -60,11 +57,20 @@ public class ParseCmdLine {
   }
 
   private void discerniCommandi(CommandLine p_cmd) throws ReadFattCmdLineException {
-    if ( !p_cmd.hasOption(ParseCmdLine.CSZ_PDFINPUT))
+    if ( !p_cmd.hasOption(ParseCmdLine.CSZ_PDFINPUT)) {
+      printUsage();
       throw new ReadFattCmdLineException("Il nome del file fattura e' obbligatorio");
-    if ( !p_cmd.hasOption(ParseCmdLine.CSZ_PROPERTY))
+    }
+    if ( !p_cmd.hasOption(ParseCmdLine.CSZ_PROPERTY)) {
+      printUsage();
       throw new ReadFattCmdLineException("Il nome del file Properties e' obbligatorio");
+    }
     setPDFFatt(p_cmd.getOptionValue(ParseCmdLine.CSZ_PDFINPUT));
     setPropertyFile(p_cmd.getOptionValue(ParseCmdLine.CSZ_PROPERTY));
+  }
+
+  private void printUsage() {
+    HelpFormatter fmtr = new HelpFormatter();
+    fmtr.printHelp("Usage:", m_opt);
   }
 }

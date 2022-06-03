@@ -1,9 +1,14 @@
 package sm.readfatt.dataset;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import lombok.Getter;
 import lombok.Setter;
 
 public class DtsRow {
+
+  private static final Logger       s_log = LogManager.getLogger(DtsRow.class);
   @Getter @Setter private Dataset   dataset;
   @Getter @Setter private DtsData[] dati;
 
@@ -28,7 +33,8 @@ public class DtsRow {
       dati = new DtsData[dataset.getColonne().size()];
     int k = pdata.getColonna().getColIndex();
     if (dati[k] != null) {
-      System.err.println("Doppia registrazione:" + pdata.toString() + " ==> " + dati[k].toString());
+      // System.err.println("Doppia registrazione:" + pdata.toString() + " ==> " + dati[k].toString());
+      s_log.error("Doppia registrazione:{} ==> {}", pdata.toString(), dati[k].toString());
     } else
       dati[k] = pdata;
   }
@@ -54,7 +60,8 @@ public class DtsRow {
     DtsCol col = dataset.getColonna(p_campo);
     int k = col.getColIndex();
     if (dati.length < k) {
-      System.err.printf("Non esiste la colonna %s index %d\n", p_campo, k);
+      // System.err.printf("Non esiste la colonna %s index %d\n", p_campo, k);
+      s_log.error("Non esiste la colonna {} index {}", p_campo, k);
       return null;
     }
     DtsData dato = dati[k];

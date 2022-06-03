@@ -5,14 +5,20 @@ import java.util.regex.Pattern;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 import sm.readfatt.dati.ETipiDato;
 
+@Log4j2
 public class GestDato2 {
 
-  @Getter @Setter private Dataset dataset;
-  @Getter @Setter private DtsCol  colonna;
-  @Getter @Setter private boolean buono;
-  @Getter @Setter private String  civetta;
+  @Getter
+  @Setter private Dataset         dataset;
+  @Getter
+  @Setter private DtsCol          colonna;
+  @Getter
+  @Setter private boolean         buono;
+  @Getter
+  @Setter private String          civetta;
 
   private static Pattern          s_patTag;
 
@@ -23,8 +29,8 @@ public class GestDato2 {
   @Override
   public String toString() {
     String sz = "*gest.null*";
-    if ( colonna != null)
-      sz =String.format( "gest(%s) col=%s",civetta,colonna.toString());
+    if (colonna != null)
+      sz = String.format("gest(%s) col=%s", civetta, colonna.toString());
     return sz;
   }
 
@@ -51,8 +57,8 @@ public class GestDato2 {
    * @param p_rex
    */
   public String parseRegex(String p_rex) {
-    String szRet = p_rex;
-    Matcher mtch = s_patTag.matcher(p_rex);
+    String  szRet = p_rex;
+    Matcher mtch  = s_patTag.matcher(p_rex);
     if ( !mtch.find())
       return szRet;
     String nome = mtch.group(1);
@@ -61,8 +67,8 @@ public class GestDato2 {
     if ( !buono)
       return null;
     // sostituisco nella stringa fornita il tag con la sua espressione regolare
-    String cosa = String.format("${%s}", nome);
-    ETipiDato tp = colonna.getTipoDato();
+    String    cosa = String.format("${%s}", nome);
+    ETipiDato tp   = colonna.getTipoDato();
     szRet = p_rex.replace(cosa, tp.getRegex());
     // System.out.println(p_rex);
     return szRet;
@@ -70,9 +76,11 @@ public class GestDato2 {
 
   public DtsData parse(String p_sz) {
     DtsData data = new DtsData(colonna);
-    Object obj = data.parse(p_sz);
+    Object  obj  = data.parse(p_sz);
     if (obj != null)
       dataset.addData(data);
+    else
+      log.error("Col({}) <- [{}]", colonna.toString(), p_sz);
     return data;
   }
 

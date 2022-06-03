@@ -3,6 +3,17 @@ package sm.readfatt.dati;
 import java.util.HashMap;
 import java.util.Map;
 
+import sm.readfatt.dataset.Dataset;
+import sm.readfatt.dataset.DtsCol;
+
+/**
+ * Enumerato dei tipi di dato che si possono incontrare nelle fatture. Ogni tipo
+ * di dato ha la sua RegEx di identificazione. Questa RegEx è utilizzata nel
+ * {@link Dataset} su ogni {@link DtsCol} per <i>parse-are<i> il valore.
+ *
+ * @author claudio
+ *
+ */
 public enum ETipiDato {
   Intero("i", "([0-9][0-9.]*)"), //
   Float("f", "(\\d+\\,\\d+)"), //
@@ -17,7 +28,7 @@ public enum ETipiDato {
 
   static {
     map = new HashMap<String, ETipiDato>();
-    for (ETipiDato tp : values()) {
+    for (ETipiDato tp : ETipiDato.values()) {
       map.put(tp.cod, tp);
     }
   }
@@ -38,5 +49,5 @@ public enum ETipiDato {
   public static ETipiDato decode(String pcod) {
     return map.get(pcod);
   }
-  
+
 }

@@ -7,12 +7,15 @@ import java.util.regex.Pattern;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 import sm.readfatt.dati.ETipiDato;
 
+@Log4j2
 public class GestRiga2 {
 
   private Pattern                m_patt;
-  @Getter @Setter private String civetta;
+  @Getter
+  @Setter private String         civetta;
   private Dataset                m_dts;
   private List<GestDato2>        m_liGestDato;
 
@@ -45,7 +48,7 @@ public class GestRiga2 {
     setCivetta(pCivetta);
     String szRegx = p_rex;
     // non ammetto piu' di 20 tag per ogni regexp
-    int i = 0;
+    int    i      = 0;
     while (szRegx.contains("${")) {
       if (i++ > 20)
         break;
@@ -55,7 +58,7 @@ public class GestRiga2 {
         break;
       // la Match.find() e' greedy per cui riporta per primo l'ultimo tag
       addField(gd, true);
-      System.out.println(szRegx);
+      log.debug("Regex:{}", szRegx);
     }
     m_patt = Pattern.compile(szRegx);
   }
@@ -70,23 +73,41 @@ public class GestRiga2 {
   }
 
   public boolean parseRiga(String p_sz) {
-    boolean bRet = false;
+    boolean bRet    = false;
+    String  szDebug = "Credito precedente";
     if (civetta != null)
       if ( !p_sz.matches(".*" + civetta + ".*"))
         return bRet;
     Matcher ma = m_patt.matcher(p_sz);
+    if (p_sz.contains(szDebug))
+      log.debug("Trovato \"{}\"", p_sz);
     bRet = ma.find();
     if ( !bRet) {
       if (civetta != null)
-        System.err.printf("frase:\"%s\" ma ... \"%s\" no match !\n", civetta, p_sz);
+        log.error("frase:\"{}\" ma ... \"{}\" no match !", civetta, p_sz);
       return bRet;
     }
     int k = 1;
     for (GestDato2 d : m_liGestDato) {
       String szdat = ma.group(k++);
-      @SuppressWarnings("unused") Object obj = d.parse(szdat);
+      @SuppressWarnings("unused")
+      Object obj   = d.parse(szdat);
     }
     return bRet;
+  }
+
+  @Override
+  public String toString() {
+    String szRet = "*null*";
+    if (m_liGestDato == null || m_liGestDato.size() == 0)
+      return szRet;
+    szRet = "";
+    for (GestDato2 dat : m_liGestDato) {
+      String lsz = dat.getColonna().toString();
+      lsz += "=" + m_dts.getValue(dat.getColonna().getName(), -1);
+      szRet += lsz + "\n";
+    }
+    return szRet;
   }
 
 }

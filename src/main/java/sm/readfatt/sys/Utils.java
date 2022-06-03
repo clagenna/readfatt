@@ -8,6 +8,11 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.UUID;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.xml.sax.SAXParseException;
 
 public class Utils {
@@ -233,4 +238,12 @@ public class Utils {
     return p_sz.substring(0, 1).toUpperCase() + p_sz.substring(1);
   }
 
+  public static void changeLogLevel(Level level) {
+    LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+    Configuration config = ctx.getConfiguration();
+    LoggerConfig loggerConfig = config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME); 
+    loggerConfig.setLevel(Level.DEBUG);
+    ctx.updateLoggers();  // This causes all Loggers to refetch information from their LoggerConfig.
+  }
+  
 }

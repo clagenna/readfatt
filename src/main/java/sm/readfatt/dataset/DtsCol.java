@@ -2,17 +2,34 @@ package sm.readfatt.dataset;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 import sm.readfatt.dati.ETipiDato;
 
+/**
+ * Nel {@link Dataset} rappresenta la descrizione della singola colonna ivi
+ * presente
+ * 
+ * @author claudio
+ *
+ */
+@Log4j2
 public class DtsCol {
+
   @SuppressWarnings("unused") private Dataset m_dataset;
-  @Getter @Setter private String              name;
-  @Getter @Setter private ETipiDato           tipoDato;
-  @Getter @Setter private String              excelrow;
-  @Getter @Setter private String              excelcol;
-  @Getter @Setter private String              seMultiRow;
-  @Getter @Setter private int                 colIndex;
-  @Getter @Setter private boolean             buono;
+  @Getter
+  @Setter private String                      name;
+  @Getter
+  @Setter private ETipiDato                   tipoDato;
+  @Getter
+  @Setter private String                      excelrow;
+  @Getter
+  @Setter private String                      excelcol;
+  @Getter
+  @Setter private String                      seMultiRow;
+  @Getter
+  @Setter private int                         colIndex;
+  @Getter
+  @Setter private boolean                     buono;
 
   public DtsCol(Dataset dataset) {
     m_dataset = dataset;
@@ -38,20 +55,20 @@ public class DtsCol {
   public void parseRegex(String p_fld) {
     String arr[] = p_fld.split(":");
     if (arr.length < 4) {
-      System.err.printf("il tag \"%s\" non ha campi a sufficienza !!\n", p_fld);
+      log.error("il tag \"{}\" non ha campi a sufficienza !!", p_fld);
       return;
     }
-    String nome = arr[0];
-    String tipo = arr[1];
+    String nome   = arr[0];
+    String tipo   = arr[1];
     String excCol = arr[2];
     String excRow = arr[3];
-    String seArr = "0";
+    String seArr  = "0";
     if (arr.length > 4)
       seArr = arr[4];
     ETipiDato tp = ETipiDato.decode(tipo);
     if (excCol != null && excCol.equals("-"))
       if (excRow == null || !excRow.equals("-"))
-        System.err.printf("Incongruenza Excel coord per %s con %s-%s !n", nome, excCol, excRow);
+        log.error("Incongruenza Excel coord per {} con coord col {} rig {}", nome, excCol, excRow);
     setName(nome);
     setTipoDato(tp);
     setExcelrow(excRow);
