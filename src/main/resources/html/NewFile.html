@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Combinator Property</title>
+<style>
+div ~ p {
+	color: #009900;
+	font-size: 32px;
+	font-weight: bold;
+	margin: 4px;
+	text-align: left;
+}
+
+div {
+	text-align: center;
+}
+</style>
+</head>
+
+<body lang="it">
+	<div>General sibling selector property (vedi div ~ p )</div>
+	<p>
+		sono adiacente ad un <b>P</b>
+	</p>
+	<div>
+		<div>child div content</div>
+		<p>paragrph in div G4G</p>
+	</div>
+	<p>paragraph outside div</p>
+	<p>next paragraph outside div</p>
+
+</body>
+</html>

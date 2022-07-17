@@ -145,72 +145,72 @@ public class GestDato {
     return szRet;
   }
 
-  @java.lang.SuppressWarnings("all")
+  
   public String getName() {
     return this.name;
   }
 
-  @java.lang.SuppressWarnings("all")
+  
   public void setName(final String name) {
     this.name = name;
   }
 
-  @java.lang.SuppressWarnings("all")
+  
   public ETipiDato getTipoDato() {
     return this.tipoDato;
   }
 
-  @java.lang.SuppressWarnings("all")
+  
   public void setTipoDato(final ETipiDato tipoDato) {
     this.tipoDato = tipoDato;
   }
 
-  @java.lang.SuppressWarnings("all")
+  
   public Object getDato() {
     return this.dato;
   }
 
-  @java.lang.SuppressWarnings("all")
+  
   public void setDato(final Object dato) {
     this.dato = dato;
   }
 
-  @java.lang.SuppressWarnings("all")
+  
   public String getRow() {
     return this.row;
   }
 
-  @java.lang.SuppressWarnings("all")
+  
   public void setRow(final String row) {
     this.row = row;
   }
 
-  @java.lang.SuppressWarnings("all")
+  
   public String getCol() {
     return this.col;
   }
 
-  @java.lang.SuppressWarnings("all")
+  
   public void setCol(final String col) {
     this.col = col;
   }
 
-  @java.lang.SuppressWarnings("all")
+  
   public String getSeArray() {
     return this.seArray;
   }
 
-  @java.lang.SuppressWarnings("all")
+  
   public void setSeArray(final String seArray) {
     this.seArray = seArray;
   }
 
-  @java.lang.SuppressWarnings("all")
+  
   public boolean isBuono() {
     return this.buono;
   }
 
-  @java.lang.SuppressWarnings("all")
+  
   public void setBuono(final boolean buono) {
     this.buono = buono;
   }

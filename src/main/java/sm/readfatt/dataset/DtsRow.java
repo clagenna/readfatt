@@ -5,9 +5,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class DtsRow {
-  private static final Logger s_log = LogManager.getLogger(DtsRow.class);
-  private Dataset dataset;
-  private DtsData[] dati;
+  private static final Logger s_log  = LogManager.getLogger(DtsRow.class);
+  public static String        s_next = ", ";
+  private Dataset             dataset;
+  private DtsData[]           dati;
 
   public DtsRow(Dataset pdts) {
     setDataset(pdts);
@@ -19,64 +20,71 @@ public class DtsRow {
   }
 
   public boolean isLibero(DtsData pdata) {
-    if (dati == null) return true;
+    if (dati == null)
+      return true;
     int ncol = pdata.getColonna().getColIndex();
     return dati[ncol] == null;
   }
 
+  /**
+   * Aggiunge la colonna dati {@link DtsData} nel array di riga utilizzando
+   * l'indice {@link DtsCol#getColIndex()} di {@link DtsData#getColonna()}
+   *
+   * @param pdata
+   */
   public void addData(DtsData pdata) {
-    if (dati == null) dati = new DtsData[dataset.getColonne().size()];
+    if (dati == null)
+      dati = new DtsData[dataset.getColonne().size()];
     int k = pdata.getColonna().getColIndex();
-    if (dati[k] != null) {
-      // System.err.println("Doppia registrazione:" + pdata.toString() + " ==> " + dati[k].toString());
+    if (dati[k] != null)
       s_log.error("Doppia registrazione:{} ==> {}", pdata.toString(), dati[k].toString());
-    } else dati[k] = pdata;
+    else
+      dati[k] = pdata;
   }
 
   @Override
   public String toString() {
     String sz = "";
-    if (dati == null) return sz;
-    int k = 0;
+    if (dati == null)
+      return sz;
+    int    k    = 0;
     String virg = "";
     for (DtsData dt : dati) {
       String l = String.format("%s(%d)%s", virg, k++, dt == null ? "" : dt.toString());
-      virg = ", ";
+      virg = s_next;
       sz += l;
     }
     return sz;
   }
 
   public Object getValue(String p_campo) {
-    if (dati == null) return null;
+    if (dati == null)
+      return null;
     DtsCol col = dataset.getColonna(p_campo);
-    int k = col.getColIndex();
+    int    k   = col.getColIndex();
     if (dati.length < k) {
       // System.err.printf("Non esiste la colonna %s index %d\n", p_campo, k);
       s_log.error("Non esiste la colonna {} index {}", p_campo, k);
       return null;
     }
     DtsData dato = dati[k];
-    if (dato == null) return null;
+    if (dato == null)
+      return null;
     return dato.getDato();
   }
 
-  @java.lang.SuppressWarnings("all")
   public Dataset getDataset() {
     return this.dataset;
   }
 
-  @java.lang.SuppressWarnings("all")
   public void setDataset(final Dataset dataset) {
     this.dataset = dataset;
   }
 
-  @java.lang.SuppressWarnings("all")
   public DtsData[] getDati() {
     return this.dati;
   }
 
-  @java.lang.SuppressWarnings("all")
   public void setDati(final DtsData[] dati) {
     this.dati = dati;
   }

@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.pdfbox.io.RandomAccessBufferedFileInputStream;
@@ -29,6 +30,7 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import sm.readfatt.dataset.Dataset;
 import sm.readfatt.dataset.DtsCol;
 import sm.readfatt.dataset.DtsRow;
@@ -39,17 +41,16 @@ import sm.readfatt.sys.ex.ReadFattException;
 import sm.readfatt.sys.ex.ReadFattPDFException;
 
 public class ReadFattMain {
-  @java.lang.SuppressWarnings("all")
-  private static final org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager.getLogger(ReadFattMain.class);
-  private static final Logger s_log = LogManager.getLogger(ReadFattMain.class);
+  // @java.lang. SuppressWarnings("all")
+  private static final Logger s_log       = LogManager.getLogger(ReadFattMain.class);
   private static final String CSZ_XLSXSRC = "dati/Fattura_Templ.xlsx";
-  private File m_pdfFile;
-  private String m_pdfText;
-  private Dataset m_dts;
-  private XSSFWorkbook m_dstwkb;
-  private String m_szXlsxFile;
-  private XSSFSheet m_dstsh;
-  private AppProperties m_props;
+  private File                m_pdfFile;
+  private String              m_pdfText;
+  private Dataset             m_dts;
+  private XSSFWorkbook        m_dstwkb;
+  private String              m_szXlsxFile;
+  private XSSFSheet           m_dstsh;
+  private AppProperties       m_props;
 
   public ReadFattMain() {
     //
@@ -73,14 +74,15 @@ public class ReadFattMain {
     m_props = new AppProperties();
     m_props.leggiPropertyFile(fiProp);
     m_pdfFile = new File(cmdParse.getPDFFatt());
+    m_dts = new Dataset();
+    m_dts.readPropertyFields();
   }
 
   private void vaiColTango() throws ReadFattException {
     m_pdfText = convertPDFDocument(m_pdfFile);
-    if (!verificaSeCorretto()) return;
+    if ( !verificaSeCorretto())
+      return;
     // m_dts = creaDataset();
-    m_dts = new Dataset();
-    m_dts.readPropertyFields();
     analizzaFilePDF();
     m_dts.printData();
     copiaXlsxTempl();
@@ -93,9 +95,9 @@ public class ReadFattMain {
   private String convertPDFDocument(File fi) throws ReadFattPDFException {
     String text;
     try {
-      PDFTextStripper stripper = new PDFTextStripper();
-      RandomAccessRead rndacc = new RandomAccessBufferedFileInputStream(fi);
-      PDFParser parser = new PDFParser(rndacc);
+      PDFTextStripper  stripper = new PDFTextStripper();
+      RandomAccessRead rndacc   = new RandomAccessBufferedFileInputStream(fi);
+      PDFParser        parser   = new PDFParser(rndacc);
       parser.parse();
       PDDocument doc = parser.getPDDocument();
       text = stripper.getText(doc);
@@ -111,11 +113,11 @@ public class ReadFattMain {
   private boolean verificaSeCorretto() {
     String szIdDoc = m_props.getProperty("IdDoc");
     if (szIdDoc == null) {
-      log.error("Non trovo nelle properties \"IdDcc\"");
+      s_log.error("Non trovo nelle properties \"IdDcc\"");
     }
-    long nRows =  //
-    //
-    Arrays.stream(m_pdfText.split("\\n")).filter(s -> s.contains(szIdDoc)).count();
+    long nRows = //
+        //
+        Arrays.stream(m_pdfText.split("\\n")).filter(s -> s.contains(szIdDoc)).count();
     return nRows >= 1;
   }
 
@@ -125,12 +127,14 @@ public class ReadFattMain {
   }
 
   private void analizzaRiga(String p_sz) {
-    if (p_sz == null || p_sz.length() < 3) return;
-    m_dts.parseRiga(p_sz);
+    if (p_sz == null || p_sz.length() < 3)
+      return;
+    String l_sz = p_sz.replace("\r", "");
+    m_dts.parseRiga(l_sz);
   }
 
   private void copiaXlsxTempl() {
-    Date lastDt = cercaLastDate();
+    Date   lastDt      = cercaLastDate();
     String szNomeSheet = Utils.s_fmtY4MD.format(lastDt);
     m_szXlsxFile = String.format("EE_%s.xlsx", szNomeSheet);
     Workbook srcwkb = null;
@@ -147,16 +151,18 @@ public class ReadFattMain {
   }
 
   private void copiaDatiInXlsx() {
-    int k = 0;
+    int    k  = 0;   // CredKwhPrec
     String sz = null;
     for (DtsRow riga : m_dts.getRighe()) {
       for (DtsCol col : m_dts.getColonne()) {
         Object val = riga.getValue(col.getName());
-        if (val == null) continue;
-        int exlRow = parseExcelRow(col.getExcelrow());
-        int exlCol = parseExcelCol(col.getExcelcol());
+        if (val == null)
+          continue;
+        int     exlRow    = parseExcelRow(col.getExcelrow());
+        int     exlCol    = parseExcelCol(col.getExcelcol());
         boolean bMultiRow = col.isMultiRow();
-        if ((exlCol == 0 && exlRow == 0) || (!bMultiRow && k > 0)) continue;
+        if ( (exlCol == 0 && exlRow == 0) || ( !bMultiRow && k > 0))
+          continue;
         exlRow += k;
         // -------------------------------
         XSSFRow exRow = m_dstsh.getRow(exlRow);
@@ -171,23 +177,23 @@ public class ReadFattMain {
         switch (col.getTipoDato()) {
           case Barrato:
           case Stringa:
-          sz = val.toString();
-          dstcell.setCellValue(sz);
-          break;
+            sz = val.toString();
+            dstcell.setCellValue(sz);
+            break;
 
           case Data:
-          Date dt = (Date) val;
-          dstcell.setCellValue(dt);
-          break;
+            Date dt = (Date) val;
+            dstcell.setCellValue(dt);
+            break;
           case Float:
           case Importo:
           case Intero:
-          double dbl = Double.parseDouble(val.toString());
-          dstcell.setCellValue(dbl);
-          break;
-        default: 
-          s_log.warn("Tipo {} della Colonna {} non considerato", col.getTipoDato(), col.toString());
-          break;
+            double dbl = Double.parseDouble(val.toString());
+            dstcell.setCellValue(dbl);
+            break;
+          default:
+            s_log.warn("Tipo {} della Colonna {} non considerato", col.getTipoDato(), col.toString());
+            break;
         }
       }
       k++;
@@ -195,19 +201,19 @@ public class ReadFattMain {
   }
 
   private void cancellaRigheConZero() {
-    final int nColEneAtt = 0;
-    final int nColDtLett = 2;
+    final int nColEneAtt  = 0;
+    final int nColDtLett  = 2;
     final int nColAttuale = 4;
-    boolean bEneAtt = false;
-    int n1RowDel = 0;
-    int n2RowDel = 0;
-    int nRowMax = 20;
+    boolean   bEneAtt     = false;
+    int       n1RowDel    = 0;
+    int       n2RowDel    = 0;
+    int       nRowMax     = 20;
     for (int nRow = 0; nRow < nRowMax; nRow++) {
       XSSFRow row = m_dstsh.getRow(nRow);
       if (row == null)
         continue;
       XSSFCell eneAtt = row.getCell(nColEneAtt);
-      if (!bEneAtt && eneAtt != null) {
+      if ( !bEneAtt && eneAtt != null) {
         // DateUtil.isCellDateFormatted(
         CellType typ = eneAtt.getCellType();
         if (typ != null && typ == CellType.STRING) {
@@ -217,39 +223,45 @@ public class ReadFattMain {
           }
         }
       }
-      if (!bEneAtt) continue;
+      if ( !bEneAtt)
+        continue;
       XSSFCell dtLett = row.getCell(nColDtLett);
-      if (!DateUtil.isCellDateFormatted(dtLett)) continue;
+      if ( !DateUtil.isCellDateFormatted(dtLett))
+        continue;
       XSSFCell attuale = row.getCell(nColAttuale);
-      if (attuale == null) continue;
+      if (attuale == null)
+        continue;
       System.out.printf("cancellaRigheConZero(dt=%s, att=%s)\n", dtLett, attuale);
       CellType typ = attuale.getCellType();
       if (typ == CellType.NUMERIC) {
         double ii = attuale.getNumericCellValue();
         if (ii == 0) {
-          if (n1RowDel == 0) n1RowDel = nRow;
+          if (n1RowDel == 0)
+            n1RowDel = nRow;
           n2RowDel = nRow;
-          log.debug("Cancello la riga {} dal foglio", nRow);
+          s_log.debug("Cancello la riga {} dal foglio", nRow);
           m_dstsh.removeRow(row);
         }
       }
     }
     if (n1RowDel > 0) {
-      log.debug("Shift dalla {} alla {}", n1RowDel, n2RowDel);
+      s_log.debug("Shift dalla {} alla {}", n1RowDel, n2RowDel);
       m_dstsh.shiftRows(n1RowDel + 1, n2RowDel + 1, -1);
     }
   }
 
   private int parseExcelRow(String excelrow) {
     int ret = 0;
-    if (!excelrow.chars().allMatch(Character::isDigit)) return ret;
+    if ( !excelrow.chars().allMatch(Character::isDigit))
+      return ret;
     ret = Integer.parseInt(excelrow) - 1;
     return ret;
   }
 
   private int parseExcelCol(String excelcol) {
     int ret = 0;
-    if (!excelcol.chars().allMatch(Character::isAlphabetic)) return ret;
+    if ( !excelcol.chars().allMatch(Character::isAlphabetic))
+      return ret;
     char[] arr = new char[excelcol.length()];
     excelcol.toLowerCase().getChars(0, excelcol.length(), arr, 0);
     for (int i = arr.length - 1; i >= 0; i--) {
@@ -272,8 +284,8 @@ public class ReadFattMain {
 
   private void lanciaExcel() {
     try {
-      File fi = new File(m_szXlsxFile);
-      String sz = fi.getAbsolutePath();
+      File   fi    = new File(m_szXlsxFile);
+      String sz    = fi.getAbsolutePath();
       String szCmd = String.format("cmd /c start excel.exe \"%s\"", sz);
       Runtime.getRuntime().exec(szCmd);
     } catch (IOException e) {
@@ -284,15 +296,16 @@ public class ReadFattMain {
 
   private Date cercaLastDate() {
     Date dt = (Date) m_dts.getValue("LettDtAttuale", 0);
-    if (dt == null) throw new UnsupportedOperationException("Non trovo l\'ultima data di lettura");
+    if (dt == null)
+      throw new UnsupportedOperationException("Non trovo l\'ultima data di lettura");
     return dt;
   }
 
   private void copyWorkb(Sheet srcsh, XSSFSheet dstsh) {
     Map<XSSFCellStyle, XSSFCellStyle> mapSty = new HashMap<>();
-    String sz = null;
-    int riga = 0;
-    int col = 0;
+    String                            sz     = null;
+    int                               riga   = 0;
+    int                               col    = 0;
     for (Row srcrow : srcsh) {
       riga = srcrow.getRowNum();
       Row dstrow = dstsh.createRow(riga);
@@ -303,40 +316,40 @@ public class ReadFattMain {
 
           case BLANK:
           case _NONE:
-          dstcell.setCellValue("");
-          break;
+            dstcell.setCellValue("");
+            break;
 
           case BOOLEAN:
-          boolean boo = srccel.getBooleanCellValue();
-          dstcell.setCellValue(Boolean.valueOf(boo));
-          break;
+            boolean boo = srccel.getBooleanCellValue();
+            dstcell.setCellValue(Boolean.valueOf(boo));
+            break;
 
           case ERROR:
-          dstcell.setCellValue("*err*");
-          break;
+            dstcell.setCellValue("*err*");
+            break;
 
           case FORMULA:
-          sz = srccel.getCellFormula();
-          dstcell.setCellFormula(sz);
-          break;
+            sz = srccel.getCellFormula();
+            dstcell.setCellFormula(sz);
+            break;
 
           case NUMERIC:
-          if (DateUtil.isCellDateFormatted(srccel)) {
-            Date dt = srccel.getDateCellValue();
-            dstcell.setCellValue(dt);
-          } else {
-            double dbl = srccel.getNumericCellValue();
-            dstcell.setCellValue(dbl);
-          }
-          break;
+            if (DateUtil.isCellDateFormatted(srccel)) {
+              Date dt = srccel.getDateCellValue();
+              dstcell.setCellValue(dt);
+            } else {
+              double dbl = srccel.getNumericCellValue();
+              dstcell.setCellValue(dbl);
+            }
+            break;
 
           case STRING:
-          sz = srccel.getStringCellValue();
-          dstcell.setCellValue(sz);
-          break;
-        default: 
-          System.err.println("case default ?!?");
-          break;
+            sz = srccel.getStringCellValue();
+            dstcell.setCellValue(sz);
+            break;
+          default:
+            System.err.println("case default ?!?");
+            break;
         }
         XSSFCellStyle srcsty = (XSSFCellStyle) srccel.getCellStyle();
         XSSFCellStyle dststy = mapSty.get(srcsty);
@@ -347,7 +360,8 @@ public class ReadFattMain {
           dststy.setFillBackgroundColor(IndexedColors.WHITE.getIndex());
           mapSty.put(srcsty, dststy);
         }
-        if (dststy != null) dstcell.setCellStyle(dststy);
+        if (dststy != null)
+          dstcell.setCellStyle(dststy);
       }
     }
   }

@@ -1,0 +1,9 @@
+sep=;
+CredAnnoPrec;CredKwhPrec;CredAnnoAttuale;CredKwhAtt;PotDtDa;PotDtA;PotCostUnit;PotContatore;PotTotale;EneDtDa;EneDtA;EneCostoUnit;EneQta;EneTotale;Ene2DtDa;Ene2DtA;Ene2CostoUnit;Ene2Qta;Ene2Totale;RifiutiDtDa;RifiutiDtA;RifiutiCostoUnit;RifiutiQta;RifiutiTotale;FattNo;DataEmiss;TotPagare;LettDtPrec;LettDtAttuale;LettAttuale;LettPrec;LettConsumo;LettCoeffK;PerFattDa;PerFattA
+2021;5096;2021;3940;01/01/2022;31/01/2022;0.89691;4.5;4.04;;;;;;;;;;;;;0.05913;;;2022/1071926;08/07/2022;73.83;31/12/2021;31/01/2022;27789;27464;325.0;1.0;01/01/2022;30/04/2022
+;;;;;;;;;;;;;;;;;;;;;;;;;;;31/01/2022;28/02/2022;28090;27789;301.0;1.0;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;28/02/2022;31/03/2022;28390;28090;300.0;1.0;;
+;;;;;;;;;;;;;;;;;;;01/01/2022;31/01/2022;;325;19.22;;;;31/03/2022;30/04/2022;28620;28390;230.0;1.0;;
+;;;;;;;;;;;;;;;;;;;01/02/2022;28/02/2022;;301;17.8;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;01/03/2022;31/03/2022;;300;17.74;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;01/04/2022;30/04/2022;;47;2.78;;;;;;;;;;;

@@ -66,22 +66,22 @@ public class ParseCmdLine {
     fmtr.printHelp("Usage:", m_opt);
   }
 
-  @java.lang.SuppressWarnings("all")
+  
   public String getPropertyFile() {
     return this.propertyFile;
   }
 
-  @java.lang.SuppressWarnings("all")
+  
   public void setPropertyFile(final String propertyFile) {
     this.propertyFile = propertyFile;
   }
 
-  @java.lang.SuppressWarnings("all")
+  
   public String getPDFFatt() {
     return this.PDFFatt;
   }
 
-  @java.lang.SuppressWarnings("all")
+  
   public void setPDFFatt(final String PDFFatt) {
     this.PDFFatt = PDFFatt;
   }

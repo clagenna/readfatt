@@ -91,22 +91,27 @@ public class DtsData {
     return szRet;
   }
 
-  @java.lang.SuppressWarnings("all")
+  public String getName() {
+    String l_sz = "*";
+    DtsCol col  = getColonna();
+    if (col == null || col.getName() == null)
+      return l_sz;
+    l_sz = col.getName();
+    return l_sz;
+  }
+
   public DtsCol getColonna() {
     return this.colonna;
   }
 
-  @java.lang.SuppressWarnings("all")
   public void setColonna(final DtsCol colonna) {
     this.colonna = colonna;
   }
 
-  @java.lang.SuppressWarnings("all")
   public Object getDato() {
     return this.dato;
   }
 
-  @java.lang.SuppressWarnings("all")
   public void setDato(final Object dato) {
     this.dato = dato;
   }

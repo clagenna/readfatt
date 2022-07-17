@@ -1,0 +1,186 @@
+<Project>
+  <Name>ReadFatt</Name>
+  <ProjectItem type="NClass.DiagramEditor.ClassDiagram.Diagram" assembly="NClass.DiagramEditor, Version=2.4.1823.0, Culture=neutral, PublicKeyToken=null">
+    <Name>DataSet</Name>
+    <Language>Java</Language>
+    <Entities>
+      <Entity type="Class">
+        <Name>Dataset</Name>
+        <Access>Public</Access>
+        <Location left="156" top="39" />
+        <Size width="162" height="164" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private List&lt;DtsCol&gt; colonne</Member>
+        <Member type="Field">private List&lt;DtsRow&gt; righe</Member>
+        <Member type="Field">private List&lt;GestRiga2&gt; liGestRiga</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>DtsCol</Name>
+        <Access>Public</Access>
+        <Location left="425" top="39" />
+        <Size width="162" height="179" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private String name</Member>
+        <Member type="Field">private ETipoDato tipodato</Member>
+        <Member type="Field">private int excelRow</Member>
+        <Member type="Field">private int excelCol</Member>
+        <Member type="Field">private int seMultiRow</Member>
+        <Member type="Field">private int colIndex</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>DtsRow</Name>
+        <Access>Public</Access>
+        <Location left="425" top="241" />
+        <Size width="189" height="111" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private DtsData[] dati</Member>
+        <Member type="Method">public void addData(DtsData pdata)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>DtsData</Name>
+        <Access>Public</Access>
+        <Location left="706" top="169" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private DtsCol colonna</Member>
+        <Member type="Field">private Object dato</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>GestRiga2</Name>
+        <Access>Public</Access>
+        <Location left="425" top="464" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private String pattern</Member>
+        <Member type="Field">private String civetta</Member>
+        <Member type="Field">private List&lt;GestDato2&gt; liGestDato</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>GestDato2</Name>
+        <Access>Public</Access>
+        <Location left="682" top="554" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private Dataset dataset</Member>
+        <Member type="Field">private DtsCol colonna</Member>
+        <Member type="Method">public DtsData parse(String szIn)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+    </Entities>
+    <Relationships>
+      <Relationship type="Association" first="1" second="0">
+        <Label>
+        </Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="False">
+          <X>377</X>
+          <Y>100</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Composition</AssociationType>
+        <StartMultiplicity>1..*</StartMultiplicity>
+        <EndMultiplicity>1</EndMultiplicity>
+      </Relationship>
+      <Relationship type="Association" first="0" second="2">
+        <Label>
+        </Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>348</X>
+          <Y>117</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>399</X>
+          <Y>264</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Aggregation</AssociationType>
+        <StartMultiplicity>1..*</StartMultiplicity>
+      </Relationship>
+      <Relationship type="Association" first="2" second="3">
+        <Label>
+        </Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Aggregation</AssociationType>
+        <StartMultiplicity>1..*</StartMultiplicity>
+      </Relationship>
+      <Relationship type="Association" first="3" second="1">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="4" second="5">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>612</X>
+          <Y>559</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>657</X>
+          <Y>589</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Aggregation</AssociationType>
+        <StartMultiplicity>1..*</StartMultiplicity>
+      </Relationship>
+      <Relationship type="Association" first="5" second="0">
+        <Label>
+        </Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>657</X>
+          <Y>617</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>619</X>
+          <Y>390</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="5" second="1">
+        <Label>
+        </Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>657</X>
+          <Y>634</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>660</X>
+          <Y>67</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="0" second="4">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>343</X>
+          <Y>135</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>379</X>
+          <Y>560</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Composition</AssociationType>
+        <StartMultiplicity>1..*</StartMultiplicity>
+      </Relationship>
+    </Relationships>
+  </ProjectItem>
+</Project>
